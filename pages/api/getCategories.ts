@@ -1,13 +1,23 @@
 import { NextApiRequest, NextApiResponse } from "next"
+import { groq } from "next-sanity";
+import { sanityClient} from '../../sanity'
 
+const query = groq`*[_type == "category"] {
+  _id,
+ slug,
+  title
+}`
 
 type Data = {
   categories: Category[]
 }
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name : "Rizky Dev" })
+  const categories = await sanityClient.fetch(query) 
+  console.log(categories);
+  res.status(200).json({categories})
+  
 }
