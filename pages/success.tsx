@@ -14,12 +14,15 @@ import Button from "../components/Button";
 import Currency from "react-currency-formatter";
 import { GetServerSideProps } from "next";
 import { fetchLineItems } from "../utils/fetchLineItems";
+import { useSession } from "next-auth/react";
 
 interface Props {
 	products: StripeProduct[];
 }
 
 const success = ({ products }: Props) => {
+	const { data: session } = useSession();
+
 	const router = useRouter();
 	const { session_id } = router.query;
 	const [mounted, setMounted] = useState(false);
@@ -86,9 +89,9 @@ const success = ({ products }: Props) => {
 							</p>
 							<h4 className="text-lg">
 								Thank you{" "}
-								{/* {session
+								{session
 									? session.user?.name?.split(" ")[0]
-									: "Guest"} */}
+									: "Guest"}
 							</h4>
 						</div>
 					</div>
