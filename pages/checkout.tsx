@@ -38,18 +38,15 @@ const Checkout = () => {
 
 		const checkoutSession: Stripe.Checkout.Session = await fetchPostJSON(
 			"/api/checkout_sessions",
-			{
-				items: items,
-			}
+			{ items: items }
 		);
 
-		// Internal Server Error
 		if ((checkoutSession as any).statusCode === 500) {
 			console.error((checkoutSession as any).message);
 			return;
 		}
 
-		// Redirect to checkout
+		// Redirect to Checkout.
 		const stripe = await getStripe();
 		const { error } = await stripe!.redirectToCheckout({
 			// Make the id field from the Checkout Session creation API response
@@ -57,7 +54,6 @@ const Checkout = () => {
 			// instead of the {{CHECKOUT_SESSION_ID}} placeholder.
 			sessionId: checkoutSession.id,
 		});
-
 		// If `redirectToCheckout` fails due to a browser or network
 		// error, display the localized error message to your customer
 		// using `error.message`.

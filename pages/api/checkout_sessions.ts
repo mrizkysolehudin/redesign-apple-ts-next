@@ -30,13 +30,11 @@ export default async function handler(
     try {
       // Create Checkout Sessions from body params
       const params: Stripe.Checkout.SessionCreateParams = {
-        payment_method_types: ["card"],
-        // shipping_address_collection: {
-        //   allowed_countries: ["US", "CA", "GB"],
-        // },
+        // submit_type: 'donate',
+        payment_method_types: ['card'],
         line_items: transformedItems,
         payment_intent_data: {},
-        mode: "payment",
+        mode: 'payment',
         success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/checkout`,
         metadata: {
@@ -46,7 +44,7 @@ export default async function handler(
       const checkoutSession: Stripe.Checkout.Session =
         await stripe.checkout.sessions.create(params);
 
-      res.status(200).json(checkoutSession);
+        res.status(200).json(checkoutSession);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Internal server error";
